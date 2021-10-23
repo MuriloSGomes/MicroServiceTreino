@@ -7,6 +7,10 @@ namespace Basket.API.Entities
 {
     public class ShoppingCart
     {
+        public ShoppingCart()
+        {
+
+        }
         public ShoppingCart(string username)
         {
             UserName = username;

@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchServiceName": "catalog.api",
+      "serviceActions": {
+        "catalog.api": "StartDebugging",
+        "catalogdb": "StartWithoutDebugging"
+      },
+      "composeLaunchAction": "LaunchBrowser",
+      "commandVersion": "1.0",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger"
+    }
+  }
+}

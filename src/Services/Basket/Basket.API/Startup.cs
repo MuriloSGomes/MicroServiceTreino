@@ -1,3 +1,4 @@
+using Basket.API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,8 @@ namespace Basket.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddStackExchangeRedisCache(opt=> opt.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString"));
+
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
