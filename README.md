@@ -10,7 +10,7 @@ Para executar o projeto va ate a pasta src e execute o comando:`docker-compose -
 
 
 ### Limpar ambiente
-- `docker-compose down`
-- `docker rm -f $(docker ps -a -q)`
-- `docker rmi -f $(docker images -a -q)`
-- `docker volume rm $(docker volume ls -q)`
+- Parar docker-compose: `docker-compose down`
+- Remover todos containers: `docker rm -f $(docker ps -a -q)`
+- Remover imagens: `docker rmi -f $(docker images -a -q)`
+- Remover volumes: `docker volume rm $(docker volume ls -q)`
