@@ -7,3 +7,10 @@ Para executar o projeto va ate a pasta src e execute o comando:`docker-compose -
 - **Discount API:** http://localhost:8002/swagger/index.html
 - **Portainer:** http://localhost:9000/#!/2/docker/dashboard
 - **PgAdmin:** http://localhost:5050/browser/
+
+
+### Limpar ambiente
+- `docker-compose down`
+- `docker rm -f $(docker ps -a -q)`
+- `docker rmi -f $(docker images -a -q)`
+- `docker volume rm $(docker volume ls -q)`
