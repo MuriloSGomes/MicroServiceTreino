@@ -1,29 +1,32 @@
 using Discount.API.Extensions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Discount.API.Repositories;
+using Microsoft.OpenApi.Models;
 
-namespace Discount.API
+var builder = WebApplication.CreateBuilder(args);
+
+// Services
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
-            host.MigrateDatabase<Program>();
-            host.Run();
-        }
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Discount.API", Version = "v1" });
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+
+var app = builder.Build();
+
+// Migrate database on startup
+app.MigrateDatabase<Program>();
+
+// Pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Discount.API v1"));
 }
+
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();

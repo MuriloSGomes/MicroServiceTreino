@@ -1,26 +1,31 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Basket.API.Repositories;
+using Microsoft.OpenApi.Models;
 
-namespace Basket.API
+var builder = WebApplication.CreateBuilder(args);
+
+// Services
+builder.Services.AddStackExchangeRedisCache(opt =>
+    opt.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString"));
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+var app = builder.Build();
+
+// Pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket.API v1"));
 }
+
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
